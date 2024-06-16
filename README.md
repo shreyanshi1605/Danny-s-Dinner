@@ -38,8 +38,7 @@ CREATE TABLE sales (
   order_date DATE,
   product_id INTEGER
 );
-```
-```
+
 INSERT INTO sales
   (customer_id, order_date, product_id)
 VALUES
@@ -65,8 +64,7 @@ CREATE TABLE menu (
   product_name VARCHAR(5),
   price INTEGER
 );
-```
-```
+
 INSERT INTO menu
   (product_id, product_name, price)
 VALUES
@@ -79,15 +77,14 @@ CREATE TABLE members (
   customer_id VARCHAR(1) PRIMARY KEY,
   join_date DATE
 );
-```
-```
+
 INSERT INTO members
   (customer_id, join_date)
 VALUES
   ('A', '2021-01-07'),
   ('B', '2021-01-09');
 ```
-1. What is the total amount each customer spent at the restaurant?
+## 1. What is the total amount each customer spent at the restaurant?
 
 The SQL query calculates the total amount spent by each customer at Danny’s Diner. It joins the sales table with the menu table on the product_id to associate each sale with its menu item price. The SUM function adds up the prices for each customer, and the GROUP BY clause ensures that the sum is calculated separately for each customer_id.
 ```
@@ -102,7 +99,7 @@ GROUP BY customer_id;
 
 The output is a table with two columns: customer_id and Total Amount Spent, showing the total spent by customers A, B, and C as 76, 74, and 36 respectively
 
-2. How many days has each customer visited the restaurant?
+## 2. How many days has each customer visited the restaurant?
 
 The SQL query aims to determine the number of distinct days each customer has visited Danny’s Diner. It selects the customer_id from the sales table and counts the unique order_date entries for each customer. The COUNT(distinct order_date) function ensures that only unique visit dates are counted, even if multiple orders were placed on the same day. The GROUP BY customer_id clause groups the results by customer, providing a count of visited days for each one.
 ```
@@ -115,7 +112,7 @@ GROUP BY customer_id;
 
 The output shows that customer A visited on 4 different days, B on 6, and C on 2.
 
-3. What was the first item from the menu purchased by each customer?
+## 3. What was the first item from the menu purchased by each customer?
 
 The SQL query joins the sales table with the menu table based on matching product_ids. The query then filters for the earliest order_date for each customer_id. The result is a list of customers along with the first item they purchased and the date of purchase. The results are ordered by customer_id.
 ```
@@ -140,7 +137,7 @@ ORDER BY
 
 The result gives us a list with customer IDs, associated product names, and the respective order dates for their first purchases.
 
-4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+## 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 
 The SQL query identifies the most purchased item on the menu by counting the number of times each item was sold, grouping the results by product name, and ordering them in descending order. The SELECT TOP 1 ensures that only the item with the highest count is returned. However, the ORDER BY clause should be COUNT(s.product_id) DESC to get the correct most purchased item.
 ```
@@ -154,7 +151,7 @@ ORDER BY max(s.product_id) DESC;
 
 The output shows that ‘ramen’ is the most purchased item, having been bought 8 times by all customers. 
 
-5. Which item was the most popular for each customer?
+## 5. Which item was the most popular for each customer?
 
 The SQL query uses a Common Table Expression (CTE) named item_COUNT to count the number of times each menu item was ordered by each customer. It then ranks these items within each customer group based on the order count. The main query selects the top-ranked (most ordered) item for each customer from the CTE.
 ```
@@ -173,7 +170,7 @@ WHERE ranking = 1
 
 The output shows each customer’s most frequently ordered item. For example, if customer A most frequently ordered ‘ramen’, and customer B most frequently ordered ‘sushi’, these would be listed in the output
 
-6. Which item was purchased first by the customer after they became a member?
+## 6. Which item was purchased first by the customer after they became a member?
 
 The SQL query creates a ranked list of menu items purchased by each customer after their membership join date, using a Common Table Expression (CTE). It then selects the first item each customer bought post-membership. The DENSE_RANK() function is used to rank the items based on the order date for each customer.
 ```
@@ -197,7 +194,7 @@ GROUP BY j.customer_id, m.product_name;
 Customer A: First purchased item post-membership is ‘ramen’.
 Customer B: First purchased item post-membership is ‘sushi’.
 
-7. Which item was purchased just before the customer became a member?
+## 7. Which item was purchased just before the customer became a member?
 
 The SQL query determines the last item purchased by each customer before they became members. It uses a Common Table Expression (CTE) to rank the purchases made before the join date and selects the most recent purchase (ranking = 1) for each customer. The final output lists the customer_id and the product_name of that last pre-membership purchase.
 ```
@@ -221,7 +218,7 @@ GROUP BY p.customer_id, m.product_name;
 Customer A: The last purchased item before membership was ‘sushi’.
 Customer B: The last purchased item before membership was also ‘sushi’
 
-8. What is the total items and amount spent for each member before they became a member?
+## 8. What is the total items and amount spent for each member before they became a member?
 
 The SQL query is designed to calculate the total number of items purchased and the total amount spent by customers on orders made before they became members. It first identifies pre-membership purchases by joining the members and sales tables, then aggregates this data with the menu table to sum up the items and costs.
 ```
@@ -242,7 +239,7 @@ GROUP BY p.customer_id;
 
 The output of the SQL query is a table with three columns: customer_id, Total Items, and Amount Spent. It shows the total number of items each customer purchased and the total amount they spent on those items before they became members
 
-9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier — how many points would each customer have?
+## 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier — how many points would each customer have?
 
 The SQL query is creating a points system for products sold, where each product contributes points based on its price and product_id. If the product_id is 1, it contributes 20 times its price in points, otherwise, it contributes 10 times its price. This is done using a Common Table Expression (CTE) named points_CTE.
 
@@ -269,7 +266,7 @@ ORDER BY s.customer_id;
 
 The output of this query is a table with two columns: customer_id and total_points. Each row represents a customer and shows the total points they have accumulated based on their purchases. This can be used to understand the rewards or loyalty points each customer has earned
 
-10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi
+## `10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi
 
 The SQL query utilizes a Common Table Expression (CTE) to calculate points for customer purchases. Points are normally 10 times the price, but purchases made within a week of joining or of ‘sushi’ earn double points. The CTE includes customer ID, product name, price, and dates.
 ```
